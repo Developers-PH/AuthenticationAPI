@@ -11,7 +11,11 @@ import org.springframework.stereotype.Component;
 
 import com.devph.authenticationapi.authenciationapi.service.impl.CustomUserDetailsImpl;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
@@ -29,7 +33,7 @@ public class JwtUtils {
   public String generateJwtToken(Authentication authentication) {
 
     CustomUserDetailsImpl userPrincipal = (CustomUserDetailsImpl) authentication.getPrincipal();
-
+    
     return Jwts.builder()
         .setSubject((userPrincipal.getUsername()))
         .setIssuedAt(new Date())

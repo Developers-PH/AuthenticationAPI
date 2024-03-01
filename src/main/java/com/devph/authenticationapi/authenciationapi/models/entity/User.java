@@ -3,7 +3,7 @@ package com.devph.authenticationapi.authenciationapi.models.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -43,6 +43,14 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @NotBlank
+    private String firstname;
+
+    private String middlename;
+
+    @NotBlank
+    private String surname;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -50,10 +58,13 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, String firstname, String middlename, String surname) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.surname = surname;
     }
 
     public Long getId() {
@@ -95,4 +106,32 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getMiddlename() {
+        return middlename;
+    }
+
+    public void setMiddlename(String middlename) {
+        this.middlename = middlename;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    
+
+    
 }

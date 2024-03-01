@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 import com.devph.authenticationapi.authenciationapi.models.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,18 +20,27 @@ public class CustomUserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private String firstname;
+
+    private String middlename = "";
+
+    private String surname;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetailsImpl(Long id, String username, String email, String password,
+    public CustomUserDetailsImpl(Long id, String username, String email, String password,String firstname, String middlename, String surname,
             Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.surname = surname;
     }
 
     public static CustomUserDetailsImpl build(User user) {
@@ -42,7 +52,36 @@ public class CustomUserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getFirstname(),
+                user.getMiddlename(),
+                user.getSurname(),
                 authorities);
+    }
+
+    
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getMiddlename() {
+        return middlename;
+    }
+
+    public void setMiddlename(String middlename) {
+        this.middlename = middlename;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     @Override
@@ -95,4 +134,17 @@ public class CustomUserDetailsImpl implements UserDetails {
         return email;
     }
 
+    public String getFullname() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(firstname).append(" ");
+        if(StringUtils.hasText(middlename)){
+            builder.append(middlename.charAt(0)).append(". ");
+        }
+        builder.append(surname).toString();
+        return builder.toString();
+    }
+
+  
+
+    
 }

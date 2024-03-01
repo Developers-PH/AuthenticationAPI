@@ -1,7 +1,7 @@
 devph:
   app:
-    jwtExpirationMs: '86400000'
-    jwtSecret: ======================BezKoder=Spring===========================
+    jwtExpirationMs: '600000'
+    jwtSecret: ======================SomeSecretKey===========================
 spring:
   datasource:
     username: postgres

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +30,8 @@ import com.devph.authenticationapi.authenciationapi.service.AuthenticationServic
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -56,10 +60,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         CustomUserDetailsImpl userDetails = (CustomUserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        logger.info(userDetails.getFullname());
 
         return ResponseEntity
                 .ok(new SigninResponseDto(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(),
-                        roles));
+                        roles, userDetails.getFirstname(), userDetails.getMiddlename(),userDetails.getSurname(), userDetails.getFullname()));
     }
 
     @Override
@@ -74,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Create new user's account
         User user = new User(signupBody.getUsername(), signupBody.getEmail(),
-                encoder.encode(signupBody.getPassword()));
+                encoder.encode(signupBody.getPassword()), signupBody.getFirstname(), signupBody.getMiddlename(), signupBody.getSurname());
 
         Set<String> strRoles = signupBody.getRole();
         Set<Role> roles = new HashSet<>();
